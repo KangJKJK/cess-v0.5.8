@@ -42,6 +42,70 @@ echo -e "${YELLOW}설치 도중 문제가 발생하면 다음 명령어를 입�
 echo -e "${YELLOW}sudo rm -f /root/cess_storage_v0.5.8.sh${NC}"
 echo
 
+#!/bin/bash
+
+# 최적화 스크립트
+
+echo -e "${GREEN}시스템 최적화 작업을 시작합니다.${NC}"
+
+# 불필요한 패키지 자동 제거
+echo -e "${GREEN}불필요한 패키지 자동 제거 중...${NC}"
+sudo apt autoremove -y
+
+# .deb 파일 삭제
+echo -e "${GREEN}.deb 파일 삭제 중...${NC}"
+sudo rm /root/*.deb
+
+# 패키지 캐시 정리
+echo -e "${GREEN}패키지 캐시 정리 중...${NC}"
+sudo apt-get clean
+
+# /tmp 디렉토리 비우기
+echo -e "${GREEN}/tmp 디렉토리 비우기 중...${NC}"
+sudo rm -rf /tmp/*
+
+# 사용자 캐시 비우기
+echo -e "${GREEN}사용자 캐시 비우기 중...${NC}"
+rm -rf ~/.cache/*
+
+# .sh 및 .rz 파일 삭제
+echo -e "${GREEN}.sh 및 .rz 파일 삭제 중...${NC}"
+sudo rm -f /root/*.sh /root/*.rz
+
+# Docker가 설치되어 있는지 확인
+if command -v docker >/dev/null 2>&1; then
+    echo -e "${GREEN}Docker가 설치되어 있습니다. Docker 관련 작업을 수행합니다.${NC}"
+
+    # Docker 로그 정리 스크립트 작성
+    echo -e "${GREEN}Docker 로그 정리 스크립트 작성 중...${NC}"
+    echo -e '#!/bin/bash\ndocker ps -q | xargs -I {} docker logs --tail 0 {} > /dev/null' | sudo tee /usr/local/bin/docker-log-cleanup.sh
+    sudo chmod +x /usr/local/bin/docker-log-cleanup.sh
+
+    # Docker 로그 정리 작업을 크론에 추가
+    echo -e "${GREEN}크론 작업 추가 중...${NC}"
+    (crontab -l ; echo '0 0 * * * /usr/local/bin/docker-log-cleanup.sh') | sudo crontab -
+
+    # 중지된 모든 컨테이너 제거
+    echo -e "${GREEN}중지된 모든 컨테이너 제거 중...${NC}"
+    sudo docker container prune -f
+
+    # 사용하지 않는 모든 이미지 제거
+    echo -e "${GREEN}사용하지 않는 모든 이미지 제거 중...${NC}"
+    sudo docker image prune -a -f
+
+    # 사용하지 않는 모든 볼륨 제거
+    echo -e "${GREEN}사용하지 않는 모든 볼륨 제거 중...${NC}"
+    sudo docker volume prune -f
+
+    # 사용하지 않는 모든 데이터 정리
+    echo -e "${GREEN}사용하지 않는 모든 데이터 정리 중...${NC}"
+    sudo docker system prune -a -f
+else
+    echo -e "${RED}Docker가 설치되어 있지 않습니다. Docker 관련 작업을 생략합니다.${NC}"
+fi
+
+echo -e "${GREEN}시스템 최적화 작업이 완료되었습니다.${NC}"
+
 # 1. 패키지 업데이트 및 필요한 패키지 설치
 execute_with_prompt "패키지 업데이트 및 필요한 패키지 설치 중..." \
     "sudo apt update && sudo apt install -y ca-certificates curl gnupg ufw && sudo apt install expect"
