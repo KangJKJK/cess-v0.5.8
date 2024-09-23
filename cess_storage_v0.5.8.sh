@@ -75,34 +75,38 @@ sudo rm -f /root/*.sh /root/*.rz
 # Docker가 설치되어 있는지 확인
 if command -v docker >/dev/null 2>&1; then
     echo -e "${GREEN}Docker가 설치되어 있습니다. Docker 관련 작업을 수행합니다.${NC}"
-
-    # Docker 로그 정리 스크립트 작성
-    echo -e "${GREEN}Docker 로그 정리 스크립트 작성 중...${NC}"
-    echo -e '#!/bin/bash\ndocker ps -q | xargs -I {} docker logs --tail 0 {} > /dev/null' | sudo tee /usr/local/bin/docker-log-cleanup.sh
-    sudo chmod +x /usr/local/bin/docker-log-cleanup.sh
-
-    # Docker 로그 정리 작업을 크론에 추가
-    echo -e "${GREEN}크론 작업 추가 중...${NC}"
-    (crontab -l ; echo '0 0 * * * /usr/local/bin/docker-log-cleanup.sh') | sudo crontab -
-
-    # 중지된 모든 컨테이너 제거
-    echo -e "${GREEN}중지된 모든 컨테이너 제거 중...${NC}"
-    sudo docker container prune -f
-
-    # 사용하지 않는 모든 이미지 제거
-    echo -e "${GREEN}사용하지 않는 모든 이미지 제거 중...${NC}"
-    sudo docker image prune -a -f
-
-    # 사용하지 않는 모든 볼륨 제거
-    echo -e "${GREEN}사용하지 않는 모든 볼륨 제거 중...${NC}"
-    sudo docker volume prune -f
-
-    # 사용하지 않는 모든 데이터 정리
-    echo -e "${GREEN}사용하지 않는 모든 데이터 정리 중...${NC}"
-    sudo docker system prune -a -f
 else
-    echo -e "${RED}Docker가 설치되어 있지 않습니다. Docker 관련 작업을 생략합니다.${NC}"
+    echo -e "${RED}Docker가 설치되어 있지 않습니다. Docker를 설치하는 중입니다...${NC}"
+    sudo apt update && sudo apt install -y curl net-tools
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
+    echo -e "${GREEN}Docker가 성공적으로 설치되었습니다.${NC}"
 fi
+
+# Docker 로그 정리 스크립트 작성
+echo -e "${GREEN}Docker 로그 정리 스크립트 작성 중...${NC}"
+echo -e '#!/bin/bash\ndocker ps -q | xargs -I {} docker logs --tail 0 {} > /dev/null' | sudo tee /usr/local/bin/docker-log-cleanup.sh
+sudo chmod +x /usr/local/bin/docker-log-cleanup.sh
+
+# Docker 로그 정리 작업을 크론에 추가
+echo -e "${GREEN}크론 작업 추가 중...${NC}"
+(crontab -l ; echo '0 0 * * * /usr/local/bin/docker-log-cleanup.sh') | sudo crontab -
+
+# 중지된 모든 컨테이너 제거
+echo -e "${GREEN}중지된 모든 컨테이너 제거 중...${NC}"
+sudo docker container prune -f
+
+# 사용하지 않는 모든 이미지 제거
+echo -e "${GREEN}사용하지 않는 모든 이미지 제거 중...${NC}"
+sudo docker image prune -a -f
+
+# 사용하지 않는 모든 볼륨 제거
+echo -e "${GREEN}사용하지 않는 모든 볼륨 제거 중...${NC}"
+sudo docker volume prune -f
+
+# 사용하지 않는 모든 데이터 정리
+echo -e "${GREEN}사용하지 않는 모든 데이터 정리 중...${NC}"
+sudo docker system prune -a -f
 
 echo -e "${GREEN}시스템 최적화 작업이 완료되었습니다.${NC}"
 
