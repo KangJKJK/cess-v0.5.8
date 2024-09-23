@@ -138,11 +138,9 @@ execute_with_prompt "UFW 설치 중..." "sudo apt-get install -y ufw"
 execute_with_prompt "필요한 포트 개방 중..." \
     "sudo ufw enable && \
     sudo ufw allow ssh && \
-    sudo ufw allow 22 && \
-    sudo ufw allow 4001 && \
-    sudo ufw allow 4000/tcp && \
-    sudo ufw allow 8001 && \
-    sudo ufw allow 8001/tcp && \
+    sudo ufw allow 30336/tcp && \
+    sudo ufw allow 15001/tcp && \
+    sudo ufw allow 19999/tcp && \
     sudo ufw status"
 sleep 2
 
