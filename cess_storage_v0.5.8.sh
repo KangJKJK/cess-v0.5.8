@@ -140,6 +140,7 @@ execute_with_prompt "필요한 포트 개방 중..." \
     sudo ufw allow ssh && \
     sudo ufw allow 4000/tcp && \
     sudo ufw allow 8080/tcp && \
+    sudo ufw allow 8000/tcp && \
     sudo ufw allow 30336/tcp && \
     sudo ufw allow 15001/tcp && \
     sudo ufw allow 19999/tcp && \
