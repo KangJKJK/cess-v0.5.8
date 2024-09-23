@@ -131,7 +131,6 @@ execute_with_prompt "Docker 서비스 활성화 및 시작 중..." \
 
 # 5. UFW 설치 및 포트 개방
 execute_with_prompt "UFW 설치 중..." "sudo apt-get install -y ufw"
-read -p "UFW를 설치한 후 계속하려면 Enter를 누르세요..."
 execute_with_prompt "UFW 활성화 중...반응이 없으면 엔터를 누르세요" "sudo ufw enable"
 execute_with_prompt "필요한 포트 개방 중..." \
     "sudo ufw allow ssh && \
