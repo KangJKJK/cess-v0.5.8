@@ -133,20 +133,6 @@ fi
 execute_with_prompt "Docker 서비스 활성화 및 시작 중..." \
     "sudo systemctl enable docker && sudo systemctl start docker"
 
-# 5. UFW 설치 및 포트 개방
-execute_with_prompt "UFW 설치 중..." "sudo apt-get install -y ufw"
-execute_with_prompt "필요한 포트 개방 중..." \
-    "sudo ufw enable && \
-    sudo ufw allow ssh && \
-    sudo ufw allow 4000/tcp && \
-    sudo ufw allow 8080/tcp && \
-    sudo ufw allow 8000/tcp && \
-    sudo ufw allow 30336/tcp && \
-    sudo ufw allow 15001/tcp && \
-    sudo ufw allow 19999/tcp && \
-    sudo ufw status"
-sleep 2
-
 # 6. CESS nodeadm 다운로드 및 설치
 execute_with_prompt "CESSv0.5.8 다운로드 중..." \
     "wget https://github.com/CESSProject/cess-nodeadm/archive/v0.5.8.tar.gz"
@@ -203,6 +189,17 @@ echo "CESS 구성 완료."
 # 8. CESS 노드 구동 및 Docker 로그 확인
 execute_with_prompt "CESS 노드 구동 및 Docker 로그 확인 중..." \
     "sudo cess start && docker logs miner"
+
+# 현재 사용 중인 포트 확인
+used_ports=$(netstat -tuln | awk '{print $4}' | grep -o '[0-9]*$' | sort -u)
+
+# 각 포트에 대해 ufw allow 실행
+for port in $used_ports; do
+    echo -e "${GREEN}포트 ${port}을(를) 허용합니다.${NC}"
+    sudo ufw allow $port
+done
+
+echo -e "${GREEN}모든 사용 중인 포트가 허용되었습니다.${NC}"
 
 echo -e "${YELLOW}모든 작업이 완료되었습니다. 컨트롤+A+D로 스크린을 종료해주세요.${NC}"
 echo -e "${GREEN}Cess wallet 생성: https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc0.cess.cloud%2Fws%2F#/explorer${NC}"
