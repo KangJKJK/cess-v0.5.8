@@ -147,6 +147,7 @@ echo -e "${YELLOW}현재 디렉토리: $(pwd)${NC}"
 execute_with_prompt "CESSv0.5.8 설치 중..." "sudo ./install.sh"
 
 # 사용자 안내 메시지
+echo -e "${RED}Cess wallet 생성: https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc0.cess.cloud%2Fws%2F#/explorer${NC}"
 echo -e "${RED}다음과 같은 안내 메시지가 나오면${NC} ${YELLOW}노란색${NC}${RED}과 같이 진행하세요:${NC}"
 
 echo -e "${GREEN}1. Enter cess node mode from 'authority/storage/rpcnode'${NC}"
@@ -202,7 +203,6 @@ done
 echo -e "${GREEN}모든 사용 중인 포트가 허용되었습니다.${NC}"
 
 echo -e "${YELLOW}모든 작업이 완료되었습니다. 컨트롤+A+D로 스크린을 종료해주세요.${NC}"
-echo -e "${GREEN}Cess wallet 생성: https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc0.cess.cloud%2Fws%2F#/explorer${NC}"
 echo -e "${GREEN}Faucet 주소: https://cess.network/faucet.html${NC}"
 echo -e "${GREEN}노드구동 확인법: sudo cess miner stat && docker logs miner${NC}"
 echo -e "${GREEN}스크립트 작성자: https://t.me/kjkresearch${NC}"
