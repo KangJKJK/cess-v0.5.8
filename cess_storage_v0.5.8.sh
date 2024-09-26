@@ -111,7 +111,7 @@ sudo docker system prune -a -f
 echo -e "${GREEN}시스템 최적화 작업이 완료되었습니다.${NC}"
 
 # 1. 패키지 업데이트 및 필요한 패키지 설치
-execute_with_prompt "패키지 업데이트 및 필요한 패키지 설치 중..." \
+execute_with_prompt "패키지 업데이트 및 필요한 패키지 설치 중...엔터를 눌러주세요" \
     "sudo apt update && sudo apt install -y ca-certificates curl gnupg ufw && sudo apt install expect"
 
 # 2. Docker GPG 키 및 저장소 설정
