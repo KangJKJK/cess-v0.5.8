@@ -42,8 +42,6 @@ echo -e "${YELLOW}설치 도중 문제가 발생하면 다음 명령어를 입�
 echo -e "${YELLOW}sudo rm -f /root/cess_storage_v0.5.8.sh${NC}"
 echo
 
-#!/bin/bash
-
 # 최적화 스크립트
 
 echo -e "${GREEN}시스템 최적화 작업을 시작합니다.${NC}"
@@ -141,7 +139,7 @@ execute_with_prompt "CESSv0.5.8 압축 해제 중..." \
 
 # CESS nodeadm 디렉토리로 이동
 echo -e "${YELLOW}디렉토리 이동 시도 중...${NC}"
-cd cess-nodeadm-0.5.8 || { echo -e "${RED}디렉토리 이동 실패${NC}"; exit 1; }
+cd /root/cess-nodeadm-0.5.8 || { echo -e "${RED}디렉토리 이동 실패${NC}"; exit 1; }
 echo -e "${YELLOW}현재 디렉토리: $(pwd)${NC}"
 
 execute_with_prompt "CESSv0.5.8 설치 중..." "sudo ./install.sh"
