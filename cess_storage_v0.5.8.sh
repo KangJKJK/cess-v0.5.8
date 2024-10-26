@@ -195,7 +195,11 @@ used_ports=$(netstat -tuln | awk '{print $4}' | grep -o '[0-9]*$' | sort -u)
 # 각 포트에 대해 ufw allow 실행
 for port in $used_ports; do
     echo -e "${GREEN}포트 ${port}을(를) 허용합니다.${NC}"
-    sudo ufw allow $port
+    sudo ufw allow $port/tcp
+    sudo ufw allow 30336/tcp
+    sudo ufw allow 9944/tcp
+    sudo ufw allow 19999/tcp
+    sudo ufw allow 15001/tcp
 done
 
 echo -e "${GREEN}모든 사용 중인 포트가 허용되었습니다.${NC}"
