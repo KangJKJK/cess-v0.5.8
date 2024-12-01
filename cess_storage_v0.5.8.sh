@@ -204,8 +204,11 @@ done
 
 echo -e "${GREEN}모든 사용 중인 포트가 허용되었습니다.${NC}"
 
+echo -e "${YELLOW}현재 실행중인 Cess 컨테이너 목록은 다음과 같습니다.${NC}"
+docker ps | grep cess
+
 echo -e "${YELLOW}모든 작업이 완료되었습니다. 컨트롤+A+D로 스크린을 종료해주세요.${NC}"
 echo -e "${GREEN}Faucet 주소: https://cess.network/faucet.html${NC}"
-echo -e "${GREEN}노드구동 확인법: sudo cess miner stat && docker logs miner${NC}"
+echo -e "${GREEN}노드구동 확인법: docker ps | grep cess${NC}"
 echo -e "${GREEN}스크립트 작성자: https://t.me/kjkresearch${NC}"
 
